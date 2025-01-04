@@ -1,0 +1,39 @@
+[versions]
+dependencyManagement = "1.1.7"
+kotlin = "2.1.0"
+mockk = "1.13.13"
+spring = "3.4.1"
+springMockk = "4.0.2"
+springPlugin = "1.9.25"
+
+[libraries]
+# Jetbrains
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect" }
+
+# Spring
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
+spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
+
+# Serialization
+jackson = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin" }
+
+# Storage
+h2 = { group = "com.h2database", name = "h2" }
+postgresql = { group = "org.postgresql", name = "postgresql" }
+
+# Test
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+kotlin-test-junit5 = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+spring-mockk = { group = "com.ninja-squad", name = "springmockk", version.ref = "springMockk" }
+
+[bundles]
+
+[plugins]
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "dependencyManagement" }
