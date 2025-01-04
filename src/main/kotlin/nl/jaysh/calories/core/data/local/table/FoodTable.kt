@@ -14,4 +14,6 @@ object FoodTable : UUIDTable(name = "foods") {
     val amountType = enumeration(name = "amount_type", AmountType::class)
     val updatedAt = datetime(name = "updated_at").defaultExpression(CurrentDateTime)
     val createdAt = datetime(name = "created_at").defaultExpression(CurrentDateTime)
+
+    val user = reference(name = "user_id", foreign = UserTable)
 }

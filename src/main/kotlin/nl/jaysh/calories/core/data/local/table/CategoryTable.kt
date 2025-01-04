@@ -8,4 +8,6 @@ object CategoryTable : UUIDTable(name = "categories") {
     val name = varchar(name = "name", length = 64)
     val updatedAt = datetime(name = "updated_at").defaultExpression(CurrentDateTime)
     val createdAt = datetime(name = "created_at").defaultExpression(CurrentDateTime)
+
+    val user = reference(name = "user_id", foreign = UserTable)
 }
