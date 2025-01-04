@@ -5,7 +5,6 @@ plugins {
 	alias(libs.plugins.kotlin.spring)
 	alias(libs.plugins.spring.boot)
 	alias(libs.plugins.spring.dependency.management)
-	alias(libs.plugins.kotlin.jpa)
 	jacoco
 }
 
@@ -24,8 +23,7 @@ repositories {
 
 dependencies {
 	implementation(libs.spring.boot.starter.web)
-	implementation(libs.spring.boot.starter.data.jpa)
-	implementation(libs.spring.boot.starter.validation)
+	implementation(libs.bundles.exposed)
 	implementation(libs.jackson)
 	implementation(libs.kotlin.reflect)
 	runtimeOnly(libs.h2)
