@@ -1,10 +1,11 @@
 [versions]
 dependencyManagement = "1.1.7"
+exposed = "0.57.0"
 kotlin = "2.1.0"
 mockk = "1.13.13"
+spotless = "6.25.0"
 spring = "3.4.1"
 springMockk = "4.0.2"
-springPlugin = "1.9.25"
 
 [libraries]
 # Jetbrains
@@ -12,8 +13,6 @@ kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect" }
 
 # Spring
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
-spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
-spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
 
 # Serialization
 jackson = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin" }
@@ -21,6 +20,11 @@ jackson = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotli
 # Storage
 h2 = { group = "com.h2database", name = "h2" }
 postgresql = { group = "org.postgresql", name = "postgresql" }
+exposed-spring-boot-starter = { group = "org.jetbrains.exposed", name = "exposed-spring-boot-starter", version.ref = "exposed" }
+exposed-java-time = { group = "org.jetbrains.exposed", name = "exposed-java-time", version.ref = "exposed" }
+exposed-dao = { group = "org.jetbrains.exposed", name = "exposed-dao", version.ref = "exposed" }
+exposed-migration = { group = "org.jetbrains.exposed", name = "exposed-migration", version.ref = "exposed" }
+exposed-crypt = { group = "org.jetbrains.exposed", name = "exposed-crypt", version.ref = "exposed" }
 
 # Test
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
@@ -30,10 +34,17 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 spring-mockk = { group = "com.ninja-squad", name = "springmockk", version.ref = "springMockk" }
 
 [bundles]
+exposed = [
+    "exposed-spring-boot-starter",
+    "exposed-java-time",
+    "exposed-dao",
+    "exposed-migration",
+    "exposed-crypt",
+]
 
 [plugins]
-kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "dependencyManagement" }

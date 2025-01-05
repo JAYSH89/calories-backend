@@ -6,8 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class CaloriesApplicationTests {
 
-	@Test
-	fun contextLoads() {
-	}
-
+  @Test
+  fun contextLoads() {
+  }
 }
