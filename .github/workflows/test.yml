@@ -1,0 +1,43 @@
+name: Run Unit Tests
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '23'
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-
+
+      - name: Run Unit Tests
+        run: ./gradlew test --no-daemon
+
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.7.1
+        with:
+          paths: |
+            ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 40
+          min-coverage-changed-files: 60
