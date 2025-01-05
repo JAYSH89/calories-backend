@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("$BASE_PATH_V1/auth")
 class AuthenticationController(private val service: AuthenticationService) {
 
-    @PostMapping("/register")
-    fun register() {
-        service.register()
-    }
+  @PostMapping("/register")
+  fun register() {
+    service.register()
+  }
 
-    @PostMapping("/login")
-    fun login() {
-        service.login()
-    }
+  @PostMapping("/login")
+  fun login() {
+    service.login()
+  }
 
-    @PostMapping("/refresh")
-    fun refresh() {
-        service.refresh()
-    }
+  @PostMapping("/refresh")
+  fun refresh() {
+    service.refresh()
+  }
 }
