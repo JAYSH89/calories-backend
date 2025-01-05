@@ -6,6 +6,4 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("$BASE_PATH_V1/dashboard")
-class DashboardController(private val dashboardService: DashboardService) {
-
-}
+class DashboardController(private val dashboardService: DashboardService)

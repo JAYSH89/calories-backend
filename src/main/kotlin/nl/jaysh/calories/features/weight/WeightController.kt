@@ -6,6 +6,4 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("$BASE_PATH_V1/weight")
-class WeightController(private val weightService: WeightService) {
-
-}
+class WeightController(private val weightService: WeightService)

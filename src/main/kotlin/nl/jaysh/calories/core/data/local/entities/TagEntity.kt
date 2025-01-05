@@ -7,9 +7,9 @@ import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
 
 class TagEntity(id: EntityID<UUID>) : UUIDEntity(id) {
-    var name by TagTable.name
-    var updatedAt by TagTable.updatedAt
-    var createdAt by TagTable.createdAt
+  var name by TagTable.name
+  var updatedAt by TagTable.updatedAt
+  var createdAt by TagTable.createdAt
 
-    companion object : UUIDEntityClass<TagEntity>(TagTable)
+  companion object : UUIDEntityClass<TagEntity>(TagTable)
 }

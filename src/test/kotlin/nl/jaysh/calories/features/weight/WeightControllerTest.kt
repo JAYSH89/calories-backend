@@ -5,6 +5,4 @@ import org.springframework.context.annotation.Import
 
 @WebMvcTest(controllers = [WeightController::class])
 @Import(WeightService::class)
-class WeightControllerTest {
-
-}
+class WeightControllerTest

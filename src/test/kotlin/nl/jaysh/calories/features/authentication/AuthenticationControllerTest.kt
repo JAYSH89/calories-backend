@@ -5,6 +5,4 @@ import org.springframework.context.annotation.Import
 
 @WebMvcTest(controllers = [AuthenticationController::class])
 @Import(AuthenticationService::class)
-class AuthenticationControllerTest {
-
-}
+class AuthenticationControllerTest

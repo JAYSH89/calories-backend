@@ -5,6 +5,4 @@ import org.springframework.context.annotation.Import
 
 @WebMvcTest(controllers = [JournalController::class])
 @Import(JournalService::class)
-class JournalControllerTest {
-
-}
+class JournalControllerTest
