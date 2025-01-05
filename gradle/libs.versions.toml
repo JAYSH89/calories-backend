@@ -3,6 +3,7 @@ dependencyManagement = "1.1.7"
 exposed = "0.57.0"
 kotlin = "2.1.0"
 mockk = "1.13.13"
+spotless = "6.25.0"
 spring = "3.4.1"
 springMockk = "4.0.2"
 
@@ -40,8 +41,10 @@ exposed = [
     "exposed-migration",
     "exposed-crypt",
 ]
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "dependencyManagement" }
