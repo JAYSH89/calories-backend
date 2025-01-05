@@ -6,6 +6,4 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("$BASE_PATH_V1/journal")
-class JournalController(private val journalService: JournalService) {
-
-}
+class JournalController(private val journalService: JournalService)

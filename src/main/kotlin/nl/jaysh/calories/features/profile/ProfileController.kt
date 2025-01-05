@@ -6,6 +6,4 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("$BASE_PATH_V1/profile")
-class ProfileController(private val profileService: ProfileService) {
-
-}
+class ProfileController(private val profileService: ProfileService)

@@ -6,6 +6,4 @@ import org.springframework.context.annotation.Import
 
 @WebMvcTest(controllers = [FoodController::class])
 @Import(ProfileService::class)
-class FoodControllerTest {
-
-}
+class FoodControllerTest

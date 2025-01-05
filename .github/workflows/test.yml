@@ -29,6 +29,9 @@ jobs:
           restore-keys: |
             gradle-
 
+      - name: Run Spotless Check
+        run: ./gradlew spotlessCheck --no-daemon
+
       - name: Run Unit Tests
         run: ./gradlew test --no-daemon
 

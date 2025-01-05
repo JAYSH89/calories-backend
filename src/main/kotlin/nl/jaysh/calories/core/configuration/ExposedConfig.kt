@@ -9,12 +9,12 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @ImportAutoConfiguration(
-    value = [ExposedAutoConfiguration::class],
-    exclude = [DataSourceTransactionManagerAutoConfiguration::class],
+  value = [ExposedAutoConfiguration::class],
+  exclude = [DataSourceTransactionManagerAutoConfiguration::class],
 )
 class ExposedConfig {
-    @Bean
-    fun databaseConfig(): DatabaseConfig = DatabaseConfig {
-        useNestedTransactions = true
-    }
+  @Bean
+  fun databaseConfig(): DatabaseConfig = DatabaseConfig {
+    useNestedTransactions = true
+  }
 }

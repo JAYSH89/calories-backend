@@ -6,6 +6,4 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("$BASE_PATH_V1/food")
-class FoodController(private val foodService: FoodService) {
-
-}
+class FoodController(private val foodService: FoodService)
