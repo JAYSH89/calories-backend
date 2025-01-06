@@ -11,4 +11,8 @@ object CategoryTable : UUIDTable(name = "categories") {
   val createdAt = datetime(name = "created_at").defaultExpression(CurrentDateTime)
 
   val user = reference(name = "user_id", foreign = UserTable, onDelete = CASCADE)
+
+  init {
+    uniqueIndex(name, user)
+  }
 }
