@@ -1,9 +1,10 @@
 package nl.jaysh.calories.core.data.local.dao
 
 import nl.jaysh.calories.core.data.local.entities.UserEntity
+import nl.jaysh.calories.core.data.local.entities.toUser
 import nl.jaysh.calories.core.data.local.table.UserTable
+import nl.jaysh.calories.core.model.user.User
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Component
 import java.util.UUID
@@ -11,13 +12,28 @@ import java.util.UUID
 @Component
 class UserDao {
 
-  fun insert(email: String, password: String) {
+  fun get(email: String, password: String): User {
+    val user = transaction {
+      UserEntity
+        .find { UserTable.email eq email }
+        .singleOrNull()
+    }
+
+    requireNotNull(user) { "resource not found" }
+    require(user.email == email && user.password == password) { "invalid credentials" }
+
+    return user.toUser()
+  }
+
+  fun insert(email: String, password: String): User {
     transaction {
-      val newUser = UserEntity.new {
+      UserEntity.new {
         this.email = email
         this.password = password
       }
     }
+
+    return get(email, password)
   }
 
   fun update(
@@ -26,25 +42,31 @@ class UserDao {
     password: String,
     newEmail: String,
     newPassword: String,
-  ) {
+  ): User {
     val result = transaction {
-      UserEntity.findSingleByAndUpdate(
-        op = (UserTable.id eq id) and (UserTable.email eq email) and (UserTable.password eq password),
-        block = {
-          it.email = newEmail
-          it.password = newPassword
-        },
-      )
+      val entity = UserEntity.findById(id)
+
+      requireNotNull(entity) { "resource not found" }
+      require(entity.email == email && entity.password == password) { "invalid credentials" }
+
+      UserEntity.findSingleByAndUpdate(UserTable.id eq id) {
+        it.email = newEmail
+        it.password = newPassword
+      }
     }
 
     requireNotNull(result)
+    return result.toUser()
   }
 
   fun delete(id: UUID, email: String, password: String) {
     transaction {
-      UserEntity.find { (UserTable.id eq id) and (UserTable.email eq email) and (UserTable.password eq password) }
-        .single()
-        .delete()
+      val entity = UserEntity.findById(id)
+
+      requireNotNull(entity) { "resource not found" }
+      require(entity.email == email && entity.password == password) { "invalid credentials" }
+
+      entity.delete()
     }
   }
 }
