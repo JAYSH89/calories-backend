@@ -36,6 +36,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.spring.mockk)
     testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.assertk)
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 
