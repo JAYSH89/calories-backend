@@ -11,5 +11,7 @@ class TagEntity(id: EntityID<UUID>) : UUIDEntity(id) {
   var updatedAt by TagTable.updatedAt
   var createdAt by TagTable.createdAt
 
+  var user by UserEntity referencedOn TagTable.user
+
   companion object : UUIDEntityClass<TagEntity>(TagTable)
 }

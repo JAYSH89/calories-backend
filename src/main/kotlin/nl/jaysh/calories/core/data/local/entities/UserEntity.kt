@@ -1,6 +1,7 @@
 package nl.jaysh.calories.core.data.local.entities
 
 import nl.jaysh.calories.core.data.local.table.UserTable
+import nl.jaysh.calories.core.model.user.User
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -14,3 +15,11 @@ class UserEntity(id: EntityID<UUID>) : UUIDEntity(id) {
 
   companion object : UUIDEntityClass<UserEntity>(UserTable)
 }
+
+fun UserEntity.toUser() = User(
+  id = this.id.value,
+  email = this.email,
+  password = this.password,
+  createdAt = this.createdAt,
+  updatedAt = this.updatedAt,
+)

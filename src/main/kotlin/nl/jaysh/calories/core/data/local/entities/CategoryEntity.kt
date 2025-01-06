@@ -11,5 +11,7 @@ class CategoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
   var updatedAt by CategoryTable.updatedAt
   var createdAt by CategoryTable.createdAt
 
+  var user by UserEntity referencedOn CategoryTable.user
+
   companion object : UUIDEntityClass<CategoryEntity>(CategoryTable)
 }

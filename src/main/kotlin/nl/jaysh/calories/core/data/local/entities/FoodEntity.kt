@@ -16,5 +16,7 @@ class FoodEntity(id: EntityID<UUID>) : UUIDEntity(id) {
   var updatedAt by FoodTable.updatedAt
   var createdAt by FoodTable.createdAt
 
+  var user by UserEntity referencedOn FoodTable.user
+
   companion object : UUIDEntityClass<FoodEntity>(FoodTable)
 }
