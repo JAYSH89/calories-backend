@@ -2,12 +2,10 @@ package nl.jaysh.calories.core.data.local.entities
 
 import nl.jaysh.calories.core.data.local.table.UserTable
 import nl.jaysh.calories.core.data.local.table.WeightMeasurementTable
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
+import nl.jaysh.calories.helper.DatabaseTestHelper
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -19,21 +17,7 @@ class WeightMeasurementEntityTest {
 
   @BeforeEach
   fun setup() {
-    Database.connect(
-      url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-      driver = "org.h2.Driver",
-    )
-
-    transaction {
-      SchemaUtils.create(UserTable, WeightMeasurementTable)
-    }
-  }
-
-  @AfterEach
-  fun tearDown() {
-    transaction {
-      SchemaUtils.drop(WeightMeasurementTable, UserTable)
-    }
+    DatabaseTestHelper.cleanDatabase()
   }
 
   @Test

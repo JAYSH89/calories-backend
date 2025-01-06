@@ -1,15 +1,12 @@
 package nl.jaysh.calories.core.data.local.entities
 
-import nl.jaysh.calories.core.data.local.table.FoodTable
 import nl.jaysh.calories.core.data.local.table.UserTable
 import nl.jaysh.calories.core.model.AmountType
+import nl.jaysh.calories.helper.DatabaseTestHelper
 import org.jetbrains.exposed.exceptions.ExposedSQLException
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -22,21 +19,7 @@ class FoodEntityTest {
 
   @BeforeEach
   fun setup() {
-    Database.connect(
-      url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-      driver = "org.h2.Driver",
-    )
-
-    transaction {
-      SchemaUtils.create(UserTable, FoodTable)
-    }
-  }
-
-  @AfterEach
-  fun tearDown() {
-    transaction {
-      SchemaUtils.drop(FoodTable, UserTable)
-    }
+    DatabaseTestHelper.cleanDatabase()
   }
 
   @Test
