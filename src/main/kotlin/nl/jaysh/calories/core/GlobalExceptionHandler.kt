@@ -9,14 +9,28 @@ import org.springframework.web.context.request.WebRequest
 @ControllerAdvice
 class GlobalExceptionHandler {
 
-  @ExceptionHandler
-  fun handleGlobalException(e: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+  @ExceptionHandler(IllegalArgumentException::class)
+  fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ErrorResponse> {
+    val httpStatus = HttpStatus.BAD_REQUEST
+
     val errorResponse = ErrorResponse(
-      status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+      status = httpStatus.value(),
       message = e.message ?: "An unexpected error occurred",
       timestamp = System.currentTimeMillis(),
     )
-    return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
+    return ResponseEntity(errorResponse, httpStatus)
+  }
+
+  @ExceptionHandler
+  fun handleGlobalException(e: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+    val httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+
+    val errorResponse = ErrorResponse(
+      status = httpStatus.value(),
+      message = e.message ?: "An unexpected error occurred",
+      timestamp = System.currentTimeMillis(),
+    )
+    return ResponseEntity(errorResponse, httpStatus)
   }
 }
 

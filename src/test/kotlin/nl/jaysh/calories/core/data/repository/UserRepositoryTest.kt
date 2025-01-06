@@ -17,6 +17,14 @@ class UserRepositoryTest {
   private lateinit var dao: UserDao
   private lateinit var repository: UserRepository
 
+  private val testUser = User(
+    id = UUID.fromString("F0406299-65DA-4660-9653-5AA44CAA1156"),
+    email = "test@example.com",
+    password = "testPass123$",
+    createdAt = LocalDateTime.of(1990, 1, 1, 0, 0, 0, 0),
+    updatedAt = LocalDateTime.of(1990, 1, 1, 0, 0, 0, 0),
+  )
+
   @BeforeEach
   fun setup() {
     dao = mockk()
@@ -25,7 +33,8 @@ class UserRepositoryTest {
 
   @Test
   fun insert() {
-    every { dao.insert(email = any(), password = any()) } returns getTestUser()
+    every { dao.insert(email = any(), password = any()) } returns testUser
+
     val email = "test@example.com"
     val password = "testPass123$"
 
@@ -37,6 +46,7 @@ class UserRepositoryTest {
   @Test
   fun delete() {
     every { dao.delete(id = any(), email = any(), password = any()) } just Runs
+
     val id = UUID.fromString("F0406299-65DA-4660-9653-5AA44CAA1156")
     val email = "test@example.com"
     val password = "testPass123$"
@@ -50,7 +60,7 @@ class UserRepositoryTest {
   fun update() {
     every {
       dao.update(id = any(), email = any(), password = any(), newEmail = any(), newPassword = any())
-    } returns getTestUser()
+    } returns testUser
 
     val id = UUID.fromString("F0406299-65DA-4660-9653-5AA44CAA1156")
     val email = "test@example.com"
@@ -62,12 +72,4 @@ class UserRepositoryTest {
 
     verify { dao.update(id = id, email = email, password = password, newEmail = newEmail, newPassword = newPassword) }
   }
-
-  fun getTestUser() = User(
-    id = UUID.randomUUID(),
-    email = "test@example.com",
-    password = "testPass123$",
-    createdAt = LocalDateTime.of(1990, 1, 1, 0, 0, 0, 0),
-    updatedAt = LocalDateTime.of(1990, 1, 1, 0, 0, 0, 0),
-  )
 }

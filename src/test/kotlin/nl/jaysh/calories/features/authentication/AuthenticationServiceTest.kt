@@ -58,7 +58,7 @@ class AuthenticationServiceTest {
     "username@.com",
     "username@domain.c",
     "'',",
-    "'         '"
+    "'         '",
   )
   fun `register should validate email format`(email: String) {
     every { repository.insert(email = any(), password = any()) } returns testUser
@@ -82,7 +82,7 @@ class AuthenticationServiceTest {
     "testpass123$",
     "Te1$",
     "'',",
-    "'         '"
+    "'         '",
   )
   fun `register should validate password format`(password: String) {
     every { repository.insert(email = any(), password = any()) } returns testUser
@@ -121,7 +121,7 @@ class AuthenticationServiceTest {
     "username@.com",
     "username@domain.c",
     "'',",
-    "'         '"
+    "'         '",
   )
   fun `login should validate email format`(email: String) {
     every { repository.get(email = any(), password = any()) } returns testUser
@@ -145,7 +145,7 @@ class AuthenticationServiceTest {
     "testpass123$",
     "Te1$",
     "'',",
-    "'         '"
+    "'         '",
   )
   fun `login should validate password format`(password: String) {
     every { repository.get(email = any(), password = any()) } returns testUser

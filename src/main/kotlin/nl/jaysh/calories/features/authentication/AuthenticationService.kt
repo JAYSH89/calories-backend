@@ -37,8 +37,7 @@ class AuthenticationService(private val repository: UserRepository) {
     return pattern.matcher(email).matches()
   }
 
-  private fun isValidPassword(password: String): Boolean =
-    password.isNotBlank() && password.validPasswordLength && password.containsSpecialCharacter && password.containsNumber && password.containsUppercaseCharacter
+  private fun isValidPassword(password: String): Boolean = password.isNotBlank() && password.validPasswordLength && password.containsSpecialCharacter && password.containsNumber && password.containsUppercaseCharacter
 
   private val String.containsSpecialCharacter: Boolean
     get() {
