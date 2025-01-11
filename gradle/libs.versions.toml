@@ -7,6 +7,7 @@ kotlin = "2.1.0"
 mockk = "1.13.13"
 spotless = "6.25.0"
 spring = "3.4.1"
+springDoc = "2.8.1"
 springMockk = "4.0.2"
 
 [libraries]
@@ -15,6 +16,9 @@ kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect" }
 
 # Spring
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+
+# Spring doc
+spring-doc = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springDoc" }
 
 # Serialization
 jackson = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin" }

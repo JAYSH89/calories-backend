@@ -29,6 +29,7 @@ dependencies {
   implementation(libs.bundles.flyway)
   implementation(libs.jackson)
   implementation(libs.kotlin.reflect)
+  implementation(libs.spring.doc)
   runtimeOnly(libs.h2)
   runtimeOnly(libs.postgresql)
   testImplementation(libs.spring.boot.starter.test) {
