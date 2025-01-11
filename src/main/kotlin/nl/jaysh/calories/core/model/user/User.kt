@@ -1,7 +1,7 @@
 package nl.jaysh.calories.core.model.user
 
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 data class User(
   val id: UUID,
