@@ -4,7 +4,7 @@ import nl.jaysh.calories.core.data.local.table.CategoryTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
+import java.util.UUID
 
 class CategoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
   var name by CategoryTable.name

@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.util.*
+import java.util.UUID
 
 class UserDaoTest {
 
@@ -70,8 +70,8 @@ class UserDaoTest {
     assertThat(result[UserTable.id]).isNotNull()
     assertThat(result[UserTable.email]).isEqualTo(testEmail)
     assertThat(result[UserTable.password]).isEqualTo(testPassword)
-    assertThat(newUser?.email).isEqualTo(testEmail)
-    assertThat(newUser?.password).isEqualTo(testPassword)
+    assertThat(newUser.email).isEqualTo(testEmail)
+    assertThat(newUser.password).isEqualTo(testPassword)
   }
 
   @Test
