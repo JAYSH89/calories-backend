@@ -3,6 +3,7 @@ assertk = "0.28.1"
 dependencyManagement = "1.1.7"
 exposed = "0.57.0"
 flyway = "11.1.1"
+jjwt = "0.12.6"
 kotlin = "2.1.0"
 mockk = "1.13.13"
 spotless = "6.25.0"
@@ -14,8 +15,14 @@ springMockk = "4.0.2"
 # Jetbrains
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect" }
 
+# JJWT
+jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { group = "io.jsonwebtoken", name = "jjwt-jackson", version.ref = "jjwt" }
+
 # Spring
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
 
 # Spring doc
 spring-doc = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springDoc" }
@@ -43,16 +50,20 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 spring-mockk = { group = "com.ninja-squad", name = "springmockk", version.ref = "springMockk" }
 
 [bundles]
-flyway = [
-    "flyway-core",
-    "flyway-database-postgresql",
-]
 exposed = [
     "exposed-spring-boot-starter",
     "exposed-java-time",
     "exposed-dao",
     "exposed-migration",
     "exposed-crypt",
+]
+flyway = [
+    "flyway-core",
+    "flyway-database-postgresql",
+]
+spring = [
+    "spring-boot-starter-web",
+    "spring-boot-starter-security",
 ]
 
 [plugins]

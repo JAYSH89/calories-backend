@@ -2,36 +2,52 @@ package nl.jaysh.calories.core
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.context.request.WebRequest
 
 @ControllerAdvice
 class GlobalExceptionHandler {
 
-  @ExceptionHandler(IllegalArgumentException::class)
-  fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ErrorResponse> {
-    val httpStatus = HttpStatus.BAD_REQUEST
+  @ExceptionHandler(IllegalStateException::class)
+  fun handleIllegalStateException(e: IllegalStateException) = ResponseEntity(
+    ErrorResponse(
+      status = HttpStatus.CONFLICT.value(),
+      message = e.message ?: e.localizedMessage,
+      timestamp = System.currentTimeMillis(),
+    ),
+    HttpStatus.CONFLICT,
+  )
 
-    val errorResponse = ErrorResponse(
-      status = httpStatus.value(),
+  @ExceptionHandler(BadCredentialsException::class)
+  fun handleBadCredentialsException(e: BadCredentialsException) = ResponseEntity(
+    ErrorResponse(
+      status = HttpStatus.UNAUTHORIZED.value(),
+      message = "incorrect username or password",
+      timestamp = System.currentTimeMillis(),
+    ),
+    HttpStatus.UNAUTHORIZED,
+  )
+
+  @ExceptionHandler(IllegalArgumentException::class)
+  fun handleIllegalArgumentException(e: IllegalArgumentException) = ResponseEntity(
+    ErrorResponse(
+      status = HttpStatus.BAD_REQUEST.value(),
       message = e.message ?: "An unexpected error occurred",
       timestamp = System.currentTimeMillis(),
-    )
-    return ResponseEntity(errorResponse, httpStatus)
-  }
+    ),
+    HttpStatus.BAD_REQUEST,
+  )
 
   @ExceptionHandler
-  fun handleGlobalException(e: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
-    val httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
-
-    val errorResponse = ErrorResponse(
-      status = httpStatus.value(),
+  fun handleGlobalException(e: Exception) = ResponseEntity(
+    ErrorResponse(
+      status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
       message = e.message ?: "An unexpected error occurred",
       timestamp = System.currentTimeMillis(),
-    )
-    return ResponseEntity(errorResponse, httpStatus)
-  }
+    ),
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
 }
 
 data class ErrorResponse(

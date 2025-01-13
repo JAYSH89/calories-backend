@@ -2,34 +2,42 @@ package nl.jaysh.calories.features.authentication
 
 import nl.jaysh.calories.core.data.repository.UserRepository
 import nl.jaysh.calories.features.authentication.model.AuthenticationResponse
-import nl.jaysh.calories.features.authentication.model.RefreshResponse
+import nl.jaysh.calories.features.security.TokenService
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.regex.Pattern
 
 @Service
-class AuthenticationService(private val repository: UserRepository) {
+class AuthenticationService(
+  private val tokenService: TokenService,
+  private val repository: UserRepository,
+  private val passwordEncoder: PasswordEncoder,
+) {
 
   fun register(email: String, password: String): AuthenticationResponse {
-    require(isValidEmail(email = email)) { "not a valid email address" }
-    require(isValidPassword(password = password)) { "not a valid password" }
+    require(isValidEmail(email)) { "not a valid email address" }
+    require(isValidPassword(password)) { "not a valid password" }
 
-    val result = repository.insert(email = email, password = password)
-    return AuthenticationResponse(id = result.id.toString(), email = result.email)
+    repository.insert(email, passwordEncoder.encode(password))
+
+    val userDetails = tokenService.authenticate(email, password)
+    val token = tokenService.generateToken(userDetails)
+
+    return AuthenticationResponse(token = token, expiresIn = 3600)
   }
 
   fun login(email: String, password: String): AuthenticationResponse {
-    require(isValidEmail(email = email)) { "not a valid email address" }
-    require(isValidPassword(password = password)) { "not a valid password" }
+    require(isValidEmail(email)) { "not a valid email address" }
+    require(isValidPassword(password)) { "not a valid password" }
 
-    val result = repository.get(email = email, password = password)
-    return AuthenticationResponse(id = result.id.toString(), email = result.email)
+    val userDetails = tokenService.authenticate(email, password)
+    val token = tokenService.generateToken(userDetails)
+
+    return AuthenticationResponse(token, 3600)
   }
 
-  fun refresh(token: String): RefreshResponse = RefreshResponse(
-    refreshToken = "notImplemented",
-    accessToken = "notImplemented",
-    expiresIn = "3600",
-  )
+  fun refresh(token: String) {
+  }
 
   private fun isValidEmail(email: String): Boolean {
     val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
@@ -37,7 +45,8 @@ class AuthenticationService(private val repository: UserRepository) {
     return pattern.matcher(email).matches()
   }
 
-  private fun isValidPassword(password: String): Boolean = password.isNotBlank() && password.validPasswordLength && password.containsSpecialCharacter && password.containsNumber && password.containsUppercaseCharacter
+  private fun isValidPassword(password: String) =
+    password.isNotBlank() && password.validPasswordLength && password.containsSpecialCharacter && password.containsNumber && password.containsUppercaseCharacter
 
   private val String.containsSpecialCharacter: Boolean
     get() {
