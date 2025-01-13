@@ -9,12 +9,17 @@ import nl.jaysh.calories.features.authentication.model.AuthenticationRequest
 import nl.jaysh.calories.features.authentication.model.AuthenticationResponse
 import nl.jaysh.calories.features.authentication.model.RefreshRequest
 import nl.jaysh.calories.features.authentication.model.RefreshResponse
+import nl.jaysh.calories.features.security.CaloriesUserDetails
 import nl.jaysh.calories.helper.toJson
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -30,12 +35,18 @@ class AuthenticationControllerTest {
   private lateinit var mockMvc: MockMvc
 
   @MockkBean
-  private lateinit var service: AuthenticationService
+  private lateinit var authService: AuthenticationService
+
+  @MockkBean
+  private lateinit var authManager: AuthenticationManager
+
+  @MockkBean
+  private lateinit var userDetailService: UserDetailsService
 
   private val testRefreshResponse = RefreshResponse(
     refreshToken = "notImplemented",
     accessToken = "notImplemented",
-    expiresIn = "3600",
+    expiresIn = 3_600L,
   )
 
   private val testUser = User(
@@ -46,13 +57,24 @@ class AuthenticationControllerTest {
     updatedAt = LocalDateTime.of(1990, 1, 1, 0, 0, 0, 0),
   )
 
-  private val testAuthenticationRequest = AuthenticationRequest(email = testUser.email, password = testUser.password)
+  private val testUserDetails = CaloriesUserDetails(testUser)
 
-  private val testAuthenticationResponse = AuthenticationResponse(id = testUser.id.toString(), email = testUser.email)
+  private val testAuthenticationRequest = AuthenticationRequest(testUser.email, testUser.password)
+
+  private val testAuthenticationResponse = AuthenticationResponse("notImplemented", 3_600L)
+
+  @BeforeEach
+  fun setup() {
+    every { authManager.authenticate(any()) } returns UsernamePasswordAuthenticationToken(
+      testUser.email,
+      testUser.password,
+    )
+    every { userDetailService.loadUserByUsername(testUser.email) } returns testUserDetails
+  }
 
   @Test
   fun `register valid credential should 200 OK`() {
-    every { service.register(email = any(), password = any()) } returns testAuthenticationResponse
+    every { authService.register(email = any(), password = any()) } returns testAuthenticationResponse
 
     mockMvc.perform(
       post("$BASE_PATH_V1/auth/register")
@@ -63,13 +85,13 @@ class AuthenticationControllerTest {
       .andExpect(jsonPath("$.id").value(testUser.id.toString()))
       .andExpect(jsonPath("$.email").value(testUser.email))
 
-    verify(exactly = 1) { service.register(email = testUser.email, password = testUser.password) }
+    verify(exactly = 1) { authService.register(email = testUser.email, password = testUser.password) }
   }
 
   @Test
   fun `register invalid email should 500 BAD REQUEST`() {
     val exception = IllegalArgumentException("not a valid email address")
-    every { service.register(email = any(), password = any()) } throws exception
+    every { authService.register(email = any(), password = any()) } throws exception
 
     val request = testAuthenticationRequest.copy(email = "invalidEmail")
     mockMvc.perform(
@@ -78,13 +100,13 @@ class AuthenticationControllerTest {
         .content(request.toJson()),
     ).andExpect(status().isBadRequest)
 
-    verify(exactly = 1) { service.register(email = request.email, password = request.password) }
+    verify(exactly = 1) { authService.register(email = request.email, password = request.password) }
   }
 
   @Test
   fun `register invalid password should 500 BAD REQUEST`() {
     val exception = IllegalArgumentException("not a valid password")
-    every { service.register(email = any(), password = any()) } throws exception
+    every { authService.register(email = any(), password = any()) } throws exception
 
     val request = testAuthenticationRequest.copy(password = "invalidPassword")
     mockMvc.perform(
@@ -93,12 +115,12 @@ class AuthenticationControllerTest {
         .content(request.toJson()),
     ).andExpect(status().isBadRequest)
 
-    verify(exactly = 1) { service.register(email = request.email, password = request.password) }
+    verify(exactly = 1) { authService.register(email = request.email, password = request.password) }
   }
 
   @Test
   fun `login valid credential should 200 OK`() {
-    every { service.login(email = any(), password = any()) } returns testAuthenticationResponse
+    every { authService.login(email = any(), password = any()) } returns testAuthenticationResponse
 
     mockMvc.perform(
       post("$BASE_PATH_V1/auth/login")
@@ -109,13 +131,13 @@ class AuthenticationControllerTest {
       .andExpect(jsonPath("$.id").value(testUser.id.toString()))
       .andExpect(jsonPath("$.email").value(testUser.email))
 
-    verify(exactly = 1) { service.login(testAuthenticationRequest.email, testAuthenticationRequest.password) }
+    verify(exactly = 1) { authService.login(testAuthenticationRequest.email, testAuthenticationRequest.password) }
   }
 
   @Test
   fun `login invalid email should 500 BAD REQUEST`() {
     val exception = IllegalArgumentException("not a valid email address")
-    every { service.login(email = any(), password = any()) } throws exception
+    every { authService.login(email = any(), password = any()) } throws exception
 
     val request = testAuthenticationRequest.copy(email = "invalidEmail")
     mockMvc.perform(
@@ -124,13 +146,13 @@ class AuthenticationControllerTest {
         .content(request.toJson()),
     ).andExpect(status().isBadRequest)
 
-    verify(exactly = 1) { service.login(email = request.email, password = request.password) }
+    verify(exactly = 1) { authService.login(email = request.email, password = request.password) }
   }
 
   @Test
   fun `login invalid password should 500 BAD REQUEST`() {
     val exception = IllegalArgumentException("not a valid password")
-    every { service.login(email = any(), password = any()) } throws exception
+    every { authService.login(email = any(), password = any()) } throws exception
 
     val request = testAuthenticationRequest.copy(password = "invalidPassword")
     mockMvc.perform(
@@ -139,12 +161,12 @@ class AuthenticationControllerTest {
         .content(request.toJson()),
     ).andExpect(status().isBadRequest)
 
-    verify(exactly = 1) { service.login(email = request.email, password = request.password) }
+    verify(exactly = 1) { authService.login(email = request.email, password = request.password) }
   }
 
   @Test
   fun `refresh valid credential should 200 OK`() {
-    every { service.refresh(token = any()) } returns testRefreshResponse
+    every { authService.refresh(token = any()) } returns testRefreshResponse
 
     val request = RefreshRequest(token = "test")
 
@@ -158,6 +180,6 @@ class AuthenticationControllerTest {
       .andExpect(jsonPath("$.accessToken").value(testRefreshResponse.accessToken))
       .andExpect(jsonPath("$.expiresIn").value(testRefreshResponse.expiresIn))
 
-    verify { service.refresh(token = request.token) }
+    verify { authService.refresh(token = request.token) }
   }
 }

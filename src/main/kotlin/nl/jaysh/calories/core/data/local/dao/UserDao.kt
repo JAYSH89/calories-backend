@@ -14,9 +14,7 @@ class UserDao {
 
   fun get(email: String, password: String): User {
     val user = transaction {
-      UserEntity
-        .find { UserTable.email eq email }
-        .singleOrNull()
+      UserEntity.find { UserTable.email eq email }.singleOrNull()
     }
 
     requireNotNull(user) { "resource not found" }
@@ -24,6 +22,10 @@ class UserDao {
 
     return user.toUser()
   }
+
+  fun findByEmail(email: String) = transaction {
+    UserEntity.find { UserTable.email eq email }.singleOrNull()
+  }?.toUser()
 
   fun insert(email: String, password: String): User {
     transaction {

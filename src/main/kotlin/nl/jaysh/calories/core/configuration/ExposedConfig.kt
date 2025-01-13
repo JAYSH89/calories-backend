@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration
   exclude = [DataSourceTransactionManagerAutoConfiguration::class],
 )
 class ExposedConfig {
+
   @Bean
   fun databaseConfig(): DatabaseConfig = DatabaseConfig {
     useNestedTransactions = true

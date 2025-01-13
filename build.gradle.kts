@@ -24,14 +24,20 @@ repositories {
 }
 
 dependencies {
-  implementation(libs.spring.boot.starter.web)
   implementation(libs.bundles.exposed)
   implementation(libs.bundles.flyway)
+  implementation(libs.bundles.spring)
   implementation(libs.jackson)
   implementation(libs.kotlin.reflect)
   implementation(libs.spring.doc)
+
+  implementation(libs.jjwt.api)
+  runtimeOnly(libs.jjwt.jackson)
+  runtimeOnly(libs.jjwt.impl)
+
   runtimeOnly(libs.h2)
   runtimeOnly(libs.postgresql)
+
   testImplementation(libs.spring.boot.starter.test) {
     exclude(module = "mockito-core")
     exclude(module = "mockito-junit-jupiter")
@@ -40,6 +46,7 @@ dependencies {
   testImplementation(libs.spring.mockk)
   testImplementation(libs.kotlin.test.junit5)
   testImplementation(libs.assertk)
+
   testRuntimeOnly(libs.junit.platform.launcher)
 }
 

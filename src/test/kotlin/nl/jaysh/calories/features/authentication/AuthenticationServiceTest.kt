@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.core.userdetails.UserDetailsService
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -20,6 +22,8 @@ class AuthenticationServiceTest {
 
   private lateinit var repository: UserRepository
   private lateinit var service: AuthenticationService
+  private lateinit var authenticationManager: AuthenticationManager
+  private lateinit var userDetailsService: UserDetailsService
 
   private val testUser = User(
     id = UUID.fromString("79F57949-05FA-4101-B094-6C1C97121B88"),
@@ -32,7 +36,9 @@ class AuthenticationServiceTest {
   @BeforeEach
   fun setUp() {
     repository = mockk()
-    service = AuthenticationService(repository)
+    authenticationManager = mockk()
+    userDetailsService = mockk()
+    service = AuthenticationService(repository, authenticationManager, userDetailsService)
   }
 
   @Test
@@ -43,9 +49,9 @@ class AuthenticationServiceTest {
     val validPassword = "testPass123$"
     val result = service.register(email = validEmail, password = validPassword)
 
-    val expected = AuthenticationResponse(id = testUser.id.toString(), email = validEmail)
-    assertThat(result.id).isEqualTo(expected.id)
-    assertThat(result.email).isEqualTo(expected.email)
+    val expected = AuthenticationResponse(token = "notImplemented", expiresIn = 3_600L)
+    assertThat(result.token).isEqualTo(expected.token)
+    assertThat(result.expiresIn).isEqualTo(expected.expiresIn)
 
     verify { repository.insert(email = validEmail, password = validPassword) }
   }
@@ -106,9 +112,9 @@ class AuthenticationServiceTest {
     val validPassword = "testPass123$"
     val result = service.login(email = validEmail, password = validPassword)
 
-    val expected = AuthenticationResponse(id = testUser.id.toString(), email = validEmail)
-    assertThat(result.id).isEqualTo(expected.id)
-    assertThat(result.email).isEqualTo(expected.email)
+    val expected = AuthenticationResponse(token = "notImplemented", expiresIn = 3_600L)
+    assertThat(result.token).isEqualTo(expected.token)
+    assertThat(result.expiresIn).isEqualTo(expected.expiresIn)
 
     verify(exactly = 1) { repository.get(email = validEmail, password = validPassword) }
   }
